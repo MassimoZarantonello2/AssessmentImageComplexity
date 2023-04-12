@@ -58,7 +58,7 @@ if __name__ == "__main__":
     
     trainTransform = transforms.Compose([               #applica delle trasformate all'immagine prima di passarla alla rete neurale
     transforms.Resize((args.image_size, args.image_size)),      #ridimensiona l'immagine
-    transforms.RandomHorizontalFlip(),                       #ruota l'immagine sull'asse orrizontale
+    transforms.RandomHorizontalFlip(),                     #ruota l'immagine sull'asse orrizontale
     transforms.ToTensor(),                                 #trasforma l'immagine in un tensore
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]) #normalizza l'immagine
 ])

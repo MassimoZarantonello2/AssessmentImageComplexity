@@ -25,21 +25,21 @@ def blend(ori_img, ic_img, alpha = 0.8, cm = plt.get_cmap("magma")):
 
         
 def infer_one_image(img_path):
-    with torch.no_grad():
+    with torch.no_grad():      #disabilita il calcolo dei gradienti
         ori_img = Image.open(img_path).convert("RGB")
         ori_height = ori_img.height
         ori_width = ori_img.width
         img = inference_transform(ori_img)
-        img = img.to(device)
-        img = img.unsqueeze(0)
-        ic_score, ic_map = model(img)
-        ic_score = ic_score.item()
+        img = img.to(device)    
+        img = img.unsqueeze(0)    #https://stackoverflow.com/questions/57237352/what-does-unsqueeze-do-in-pytorch
+        ic_score, ic_map = model(img)   #esegue la predizione ritornando lo score della complessità e la mappa
+        ic_score = ic_score.item() 
         ic_map = F.interpolate(ic_map, (ori_height, ori_width), mode = 'bilinear')
         
         ## gene ic map
-        ic_map_np = ic_map.squeeze().detach().cpu().numpy()
-        out_ic_map_name = os.path.basename(img_path).split('.')[0] + '_' + str(ic_score)[:7] + '.npy'
-        out_ic_map_path = os.path.join(args.output, out_ic_map_name)
+        ic_map_np = ic_map.squeeze().detach().cpu().numpy()     #carica la mappa su CPU e la trasforma in numpy
+        out_ic_map_name = os.path.basename(img_path).split('.')[0] + '_' + str(ic_score)[:7] + '.npy'   #salva la mappa con il nome dell'immagine e lo score
+        out_ic_map_path = os.path.join(args.output, out_ic_map_name)    
         np.save(out_ic_map_path, ic_map_np)
         
         ## gene blend map
@@ -54,25 +54,25 @@ def infer_one_image(img_path):
     
 def infer_directory(img_dir):
     imgs = os.listdir(img_dir)
-    for img in tqdm(imgs):
+    for img in tqdm(imgs):      #esegue infer_one_image su tutte le immagini della cartella
         img_path = os.path.join(img_dir, img)
         infer_one_image(img_path)
 
 if __name__ == "__main__":
     args  = parser.parse_args()
     
-    model = ICNet()
-    model.load_state_dict(torch.load('./checkpoint/ck.pth',map_location=torch.device('cpu')))
-    model.eval()
-    device = torch.device(args.device)
-    model.to(device)
+    model = ICNet()     #inizzializza il medello ICNet
+    model.load_state_dict(torch.load('./checkpoint/ck.pth',map_location=torch.device('cpu')))      #carica i pesi del modello
+    model.eval()    #mette il modello in modalità di valutazione
+    device = torch.device(args.device)   #seleziona la GPU
+    model.to(device)    #sposta il modello sulla GPU
     
-    inference_transform = transforms.Compose([
+    inference_transform = transforms.Compose([      #esegue delle trasformazioni sull'immagine
         transforms.Resize((512,512)),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
-    if os.path.isfile(args.input):
+    if os.path.isfile(args.input):      #se l'input è un file
         infer_one_image(args.input)
     else:
         infer_directory(args.input)
