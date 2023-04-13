@@ -39,8 +39,9 @@ def infer_one_image(img_path):
         ## gene ic map
         ic_map_np = ic_map.squeeze().detach().cpu().numpy()     #carica la mappa su CPU e la trasforma in numpy
         out_ic_map_name = os.path.basename(img_path).split('.')[0] + '_' + str(ic_score)[:7] + '.npy'   #salva la mappa con il nome dell'immagine e lo score
-        out_ic_map_path = os.path.join(args.output, out_ic_map_name)    
+        out_ic_map_path = os.path.join(args.output, out_ic_map_name)
         np.save(out_ic_map_path, ic_map_np)
+        f.write(img_path.split('\\',1)[1]+" "+str(ic_score)+"\n")
         
         ## gene blend map
         ic_map_img = (ic_map * 255).round().squeeze().detach().cpu().numpy().astype('uint8')
@@ -72,10 +73,11 @@ if __name__ == "__main__":
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
-    if os.path.isfile(args.input):      #se l'input è un file
-        infer_one_image(args.input)
-    else:
-        infer_directory(args.input)
+    with open('./out/text_reuslt.txt', 'w') as f:
+        if os.path.isfile(args.input):      #se l'input è un file
+            infer_one_image(args.input)
+        else:
+            infer_directory(args.input)
 
 
     
