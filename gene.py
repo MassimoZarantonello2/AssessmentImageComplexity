@@ -11,7 +11,7 @@ from matplotlib import pyplot as plt
 from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-i', '--input', type = str, default = './example')
+parser.add_argument('-i', '--input', type = str, default = './IC9600/images')
 parser.add_argument('-o', '--output', type = str, default = './out')
 parser.add_argument('-d', '--device', type = int, default=0)
 
@@ -37,10 +37,11 @@ def infer_one_image(img_path):
         ic_map = F.interpolate(ic_map, (ori_height, ori_width), mode = 'bilinear')
         
         ## gene ic map
-        ic_map_np = ic_map.squeeze().detach().cpu().numpy()     #carica la mappa su CPU e la trasforma in numpy
-        out_ic_map_name = os.path.basename(img_path).split('.')[0] + '_' + str(ic_score)[:7] + '.npy'   #salva la mappa con il nome dell'immagine e lo score
-        out_ic_map_path = os.path.join(args.output, out_ic_map_name)
-        np.save(out_ic_map_path, ic_map_np)
+        #ic_map_np = ic_map.squeeze().detach().cpu().numpy()     #carica la mappa su CPU e la trasforma in numpy
+        #out_ic_map_name = os.path.basename(img_path).split('.')[0] + '_' + str(ic_score)[:7] + '.npy'   #salva la mappa con il nome dell'immagine e lo score
+        #out_ic_map_path = os.path.join(args.output, out_ic_map_name)
+        #np.save(out_ic_map_path, ic_map_np)
+        
         f.write(img_path.split('\\',1)[1]+" "+str(ic_score)+"\n")
         
         ## gene blend map
@@ -73,17 +74,8 @@ if __name__ == "__main__":
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
-    with open('./out/text_reuslt.txt', 'w') as f:
+    with open('./IC9600_results.txt','a') as f:
         if os.path.isfile(args.input):      #se l'input è un file
             infer_one_image(args.input)
-        else:
+        else:                               #se l'input è una directory
             infer_directory(args.input)
-
-
-    
-
-
-
-
-
-

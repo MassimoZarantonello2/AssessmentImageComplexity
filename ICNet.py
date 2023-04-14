@@ -76,7 +76,7 @@ class up_conv_bn_relu(nn.Module):
 
 
 
-class ICNet(nn.Module):
+class ICNet(nn.Module):    
     def __init__(self, is_pretrain = True, size1 = 512, size2 = 256):       #costruttore
         super(ICNet,self).__init__()
         resnet18Pretrained1 = torchvision.models.resnet18(pretrained= is_pretrain)  #carico il modello preaddestrato su ImageNet
