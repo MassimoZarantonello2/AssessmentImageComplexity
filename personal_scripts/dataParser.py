@@ -1,18 +1,13 @@
 import re
-
-'''def parse(path):    
-    lines = f.readlines()
-    for line in lines:
-        category,x = line.split("_", 1)
-        name,cpl_score = x.split("  ", 1)
-        f2.write(category + " " + name + " " + cpl_score)'''
         
 def generate_list_dict (path,lista,dict):
     with open(path, 'r') as f:
         lines = f.readlines()
         for line in lines:
             name,cpl_score = line.split("  ", 1)
+            name = name.replace(" ","_")
             lista.append(name)
+            print(name)
             dict[name] = (cpl_score)
     return lista,dict
 
@@ -29,7 +24,6 @@ if __name__ == "__main__":
     
     GT_names.sort()
     with open("./IC9600/GT_IC9600.txt", 'w') as f2:
-        for i in range(len(GT_names)-1):
+        for i in range(len(GT_names)):
             name = GT_names[i]
             f2.write(name + " " + GT_dict[name])
-    
