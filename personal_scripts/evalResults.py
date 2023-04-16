@@ -1,15 +1,6 @@
 import numpy as np
 from scipy.stats import pearsonr, spearmanr
 
-def difference(score,label):
-    difference_res = []
-    for i in range(len(score)):
-        x = float(score[i])
-        y = float(label[i])
-        difference_res.append(x-y)
-    return difference_res
-        
-
 def evaInfo(score,label):
     
     score = np.array(score)
@@ -27,27 +18,30 @@ def evaInfo(score,label):
 
     return info
 
-def get_scores(path):
-    lista = []
+def get_all_data(path):
+    labels = []
+    scores = []
     with open(path, 'r') as f:
         lines = f.readlines()
         for line in lines:
             name,cpl_score = line.split(" ", 1)
-            lista.append(cpl_score[:len(cpl_score)-1])
-    return lista
+            labels.append(name)
+            scores.append(cpl_score[:len(cpl_score)-1])
+    return labels,scores
 
-def get_labels(path):
-    lista = []
+def get_partial_data(path,GT_labels):
+    ICNet_test_results = []
     with open(path, 'r') as f:
         lines = f.readlines()
         for line in lines:
             name,cpl_score = line.split(" ", 1)
-            lista.append(name)
-    return lista
+            if name in GT_labels:
+                ICNet_test_results.append(cpl_score[:len(cpl_score)-1])
+    return ICNet_test_results
 
 if __name__ == "__main__":
-    GT_results = get_scores("./IC9600/GT_IC9600.txt")
-    ICNet_results = get_scores("./IC9600/IC9600_results.txt")
-    
-    print(evaInfo(ICNet_results,GT_results))
+    GT_labels,GT_scores = get_all_data("./IC9600/parsed_files/test_and_train_parsed.txt")
+    GT_labels,ICNet_scores = get_all_data("./IC9600/ICNet_results.txt")
+
+    print(evaInfo(GT_scores,ICNet_scores))
     

@@ -15,7 +15,7 @@ def train(epoch):
     model.train()
     for batch_index, (image,label,_) in enumerate(trainDataLoader):        
         image = image.to(device)        #sporta l'immagine e l'etichetta sulla GPU
-        label = label.to(device)       
+        label = label.to(device)
         Opmimizer.zero_grad()        #azzera i gradienti
         score1, cly_map = model(image)   #passa l'immagine alla rete neurale e ottiene la mappa di complessità e lo score
         score2 = cly_map.mean(axis = (1,2,3)) #calcola lo score come la media della mappa di complessità su tutti i pixel

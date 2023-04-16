@@ -74,7 +74,7 @@ if __name__ == "__main__":
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
-    with open('./IC9600_results.txt','a') as f:
+    with open('./ICNet_results.txt','a') as f:
         if os.path.isfile(args.input):      #se l'input è un file
             infer_one_image(args.input)
         else:                               #se l'input è una directory
