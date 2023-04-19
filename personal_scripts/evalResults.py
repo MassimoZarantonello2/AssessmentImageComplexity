@@ -39,9 +39,29 @@ def get_partial_data(path,GT_labels):
                 ICNet_test_results.append(cpl_score[:len(cpl_score)-1])
     return ICNet_test_results
 
-if __name__ == "__main__":
-    GT_labels,GT_scores = get_all_data("./IC9600/parsed_files/test_and_train_parsed.txt")
-    GT_labels,ICNet_scores = get_all_data("./IC9600/ICNet_results.txt")
+def get_category_data(path):
+    last_category = ''
+    categories_score = []
+    category_score = []
+    i = 0
+    with open(path, 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            category,name_score = line.split('_', 1)
+            score = name_score.split(" ", 1)[1][:len(name_score.split(" ", 1)[1])-1]
+            
+            if(category == last_category):
+                category_score.append(score)
+            else:
+                categories_score.append(category_score)
+                category_score = [score]
+                last_category = category
+                i += 1
+    categories_score.append(category_score)
+    return categories_score[1:]
 
-    print(evaInfo(GT_scores,ICNet_scores))
-    
+if __name__ == "__main__":
+    GT_category_scores = get_category_data("./IC9600/parsed_files/test_and_train_parsed.txt")
+    ICNet_category_scores = get_category_data("./IC9600/ICNet_results.txt")
+    for i in range(len(GT_category_scores)):
+        print(evaInfo(GT_category_scores[i],ICNet_category_scores[i]))

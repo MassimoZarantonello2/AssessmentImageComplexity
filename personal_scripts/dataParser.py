@@ -1,4 +1,4 @@
-def parseFile(read_path, write_path):
+def parse_file(read_path, write_path):
     label_list = []
     label_score_dict = {}
     
@@ -15,6 +15,6 @@ def parseFile(read_path, write_path):
                 g.write(name.replace(' ','_') + " " + label_score_dict[name])
 
 if __name__ == '__main__':
-    parseFile('./IC9600/test.txt','./IC9600/test_parsed.txt')
-    parseFile('./IC9600/train.txt','./IC9600/train_parsed.txt')
-    #parseFile('./IC9600/test_and_train.txt','./IC9600/test_and_train_parsed.txt')
+    read_path = ''
+    write_path = ''
+    parse_file(read_path, write_path)
