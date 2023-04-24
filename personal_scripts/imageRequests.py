@@ -6,8 +6,8 @@ import threading
 #implementare il multithreading per scaricare più immagini contemporaneamente
 #implementare il multithreading per scaricare categorie contemporaneamente
 
-categories = ['scene','object','paintings']
-photo_number = 2
+categories = ['abstract','advertisement','architecture','object','paintings','person','scene','transport']
+photo_number = 3
 public_key = 'P7m3-dlFVMxb-Lbtf89vFn5zNYof55mcNkI36L3h2VA'
 
 def download_images(category):
@@ -29,13 +29,12 @@ def download_images(category):
             print("Invalid image")
 
 if __name__ == "__main__":
-
+    thread_array = []
     if not os.path.exists("./my_images"):
         os.makedirs("./my_images")
-        thread_array = []
     
-    for i in range(0,len(categories)):
-        thread_array[i] = threading.Thread(target=download_images, args=(categories[i],))
+    for i in range(0,len(categories)-1):
+        thread_array.append(threading.Thread(target=download_images, args=(categories[i],)))
         thread_array[i].start()
         
     for thread in thread_array:
