@@ -11,8 +11,8 @@ from matplotlib import pyplot as plt
 from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-i', '--input', type = str, default = './IC9600/images')
-parser.add_argument('-o', '--output', type = str, default = './out')
+parser.add_argument('-i', '--input', type = str, default = './my_images')
+parser.add_argument('-o', '--output', type = str, default = './my_images')
 parser.add_argument('-d', '--device', type = int, default=0)
 
 def blend(ori_img, ic_img, alpha = 0.8, cm = plt.get_cmap("magma")):
@@ -47,7 +47,7 @@ def infer_one_image(img_path):
         ## gene blend map
         ic_map_img = (ic_map * 255).round().squeeze().detach().cpu().numpy().astype('uint8')
         blend_img = blend(np.array(ori_img), ic_map_img)
-        out_blend_img_name = os.path.basename(img_path).split('.')[0]  + '.png'
+        out_blend_img_name = os.path.basename(img_path).split('.')[0]  + '_hm.png'
         out_blend_img_path = os.path.join(args.output, out_blend_img_name)
         cv2.imwrite(out_blend_img_path, blend_img)
         return ic_score
@@ -74,7 +74,7 @@ if __name__ == "__main__":
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
-    with open('./ICNet_results.txt','a') as f:
+    with open('./my_ICNet_results.txt','a') as f:
         if os.path.isfile(args.input):      #se l'input è un file
             infer_one_image(args.input)
         else:                               #se l'input è una directory
