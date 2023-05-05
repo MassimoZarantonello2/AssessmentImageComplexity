@@ -61,7 +61,8 @@ def get_category_data(path):
     return categories_score[1:]
 
 if __name__ == "__main__":
-    GT_category_scores = get_category_data("./IC9600/parsed_files/test_and_train_parsed.txt")
-    ICNet_category_scores = get_category_data("./IC9600/ICNet_results.txt")
-    for i in range(len(GT_category_scores)):
-        print(evaInfo(GT_category_scores[i],ICNet_category_scores[i]))
+    #GT_category_scores = get_category_data("./IC9600/parsed_files/test_and_train_parsed.txt")
+    #ICNet_category_scores = get_category_data("./IC9600/ICNet_results.txt")
+    labels,GT_scores = get_all_data("./IC9600/parsed_files/test_and_train_parsed.txt")
+    labels,ResNet18_scores = get_all_data("./ResNet18/ResNet18_GT.txt")
+    print(evaInfo(ResNet18_scores,GT_scores))
