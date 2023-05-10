@@ -1,5 +1,8 @@
 import numpy as np
 from scipy.stats import pearsonr, spearmanr
+import os
+import pandas as pd
+import time
 
 def evaInfo(score,label):
     
@@ -18,7 +21,7 @@ def evaInfo(score,label):
 
     return info
 
-def get_all_data(path):
+def get_all_data(path):         #funzione che ritorna una lista di label e una lista di score se sono nel formato "label score" !!separati da uno spazio
     labels = []
     scores = []
     with open(path, 'r') as f:
@@ -29,7 +32,7 @@ def get_all_data(path):
             scores.append(cpl_score[:len(cpl_score)-1])
     return labels,scores
 
-def get_partial_data(path,GT_labels):
+def get_partial_data(path,GT_labels):            #funzione che ritorna una lista di 
     ICNet_test_results = []
     with open(path, 'r') as f:
         lines = f.readlines()
@@ -60,9 +63,50 @@ def get_category_data(path):
     categories_score.append(category_score)
     return categories_score[1:]
 
+def get_Savoias_GT_Scores():
+    GT_scores = []
+    GT_path = "./Savoias-Dataset-master/GroundTruth/xlsx/"
+    GT_files = os.listdir(GT_path)
+    for GT_file in GT_files:
+        df = pd.read_excel(GT_path+GT_file)
+        #read the first column of the excel file
+        for index, row in df.iterrows():
+            GT_scores.append(row[0]/100)
+    return GT_scores
+        
+
 if __name__ == "__main__":
     #GT_category_scores = get_category_data("./IC9600/parsed_files/test_and_train_parsed.txt")
     #ICNet_category_scores = get_category_data("./IC9600/ICNet_results.txt")
-    labels,GT_scores = get_all_data("./IC9600/parsed_files/test_and_train_parsed.txt")
-    labels,ResNet18_scores = get_all_data("./ResNet18/ResNet18_GT.txt")
-    print(evaInfo(ResNet18_scores,GT_scores))
+
+    '''IC9600 with VGG16'''
+    _,IC9600_GT = get_all_data('./IC9600/parsed_files/test_and_train_parsed.txt')
+    _,ICNet_IC9600_scores = get_all_data('./VGG-16/test_results/VGG_ResNet18_fourth_layer_normalized.txt')
+    print('\nIC9600 with VGG16')
+    print(evaInfo(IC9600_GT,ICNet_IC9600_scores))
+    print('---------------------------------\n')
+    time.sleep(1)
+    
+    '''IC9600 with ResNet'''
+    _,IC9600_GT = get_all_data('./IC9600/parsed_files/test_and_train_parsed.txt')
+    _,ICNet_IC9600_scores = get_all_data('./ResNet18/test_results/new_IC9600_ResNet18_fourth_layer_normalized.txt')
+    print('\nIC9600 with VGG16')
+    print(evaInfo(IC9600_GT,ICNet_IC9600_scores))
+    print('---------------------------------\n')
+    time.sleep(1)
+    
+    '''SAVOIAS with ResNet'''
+    _,IC9600_GT = get_all_data('./IC9600/parsed_files/test_and_train_parsed.txt')
+    _,ICNet_IC9600_scores = get_all_data('./ResNet18/test_results/new_IC9600_ResNet18_fourth_layer_normalized.txt')
+    print('\nIC9600 with VGG16')
+    print(evaInfo(IC9600_GT,ICNet_IC9600_scores))
+    print('---------------------------------\n')
+    time.sleep(1)
+    
+    '''SAVOIAS with VGG16'''
+    _,IC9600_GT = get_all_data('./IC9600/parsed_files/test_and_train_parsed.txt')
+    _,ICNet_IC9600_scores = get_all_data('./ResNet18/test_results/new_IC9600_ResNet18_fourth_layer_normalized.txt')
+    print('\nIC9600 with VGG16')
+    print(evaInfo(IC9600_GT,ICNet_IC9600_scores))
+    print('---------------------------------\n')
+    time.sleep(1)

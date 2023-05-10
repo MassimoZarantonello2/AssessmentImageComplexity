@@ -1750,7 +1750,7 @@ advertisement_173149.png 0.5232721
 advertisement_173204.png 0.5193289
 advertisement_173220.png 0.45707425
 advertisement_173259.png 0.4710621
-advertisement_173295.png 0.5746926
+advertisement_173295.png 0.5284981
 advertisement_173396.png 0.48311847
 advertisement_173410.png 0.5132777
 advertisement_173501.png 0.459491
@@ -1785,7 +1785,7 @@ advertisement_175093.png 0.5517614
 advertisement_175109.png 0.4751479
 advertisement_175121.png 0.52522284
 advertisement_175224.png 0.52210486
-advertisement_175250.png 0.5523431
+advertisement_175250.png 0.53550375
 advertisement_175292.png 0.46243718
 advertisement_175355.png 0.5190666
 advertisement_175444.png 0.5603778
@@ -1816,7 +1816,7 @@ advertisement_176813.png 0.4897634
 advertisement_176825.png 0.45470235
 advertisement_176872.png 0.5390832
 advertisement_176873.png 0.5016172
-advertisement_176912.png 0.5681537
+advertisement_176912.png 0.57695055
 advertisement_176927.png 0.44904274
 advertisement_176984.png 0.48053613
 advertisement_177002.png 0.4420669
@@ -1824,7 +1824,7 @@ advertisement_177026.png 0.51084626
 advertisement_177031.png 0.5304714
 advertisement_177050.png 0.55175906
 advertisement_177052.png 0.5567226
-advertisement_177055.png 0.5431203
+advertisement_177055.png 0.5345503
 advertisement_177075.png 0.57781684
 advertisement_177091.png 0.50186527
 advertisement_177099.png 0.48458862

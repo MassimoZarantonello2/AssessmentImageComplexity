@@ -1,30 +1,29 @@
 import torch.nn as nn
 import torchvision.models as models
 from torchvision import transforms
-from torchvision.models import resnet18, ResNet18_Weights
+from torchvision.models import inception_v3,Inception_V3_Weights
 from PIL import Image
 import os
 
-model = models.resnet18(weights = ResNet18_Weights.DEFAULT)
-fourth_layer = nn.Sequential(*list(model.children())[:5])
-#resize the image to 224x224 and convert it to a torch tensor
+model = models.inception_v3(weights = Inception_V3_Weights)
+n_layer = nn.Sequential(*list(model.children())[:5])
 preprocess = transforms.Compose([
-    transforms.Resize(256),
-    transforms.CenterCrop(224),
+    transforms.Resize(299),
+    transforms.CenterCrop(299),
     transforms.ToTensor(),
     #transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                        #std=[0.229, 0.224, 0.225])
+                         #std=[0.229, 0.224, 0.225])
 ])
 
 def get_complexity_score(input_tensor):
     input_batch = input_tensor.unsqueeze(0)
-    output = fourth_layer(input_batch)
+    output = n_layer(input_batch)
     complexity = output.mean().data.numpy()
     return complexity
 
-def compute_ResNet18_IC9600():
+def compute_Inception_IC9600():
     read_path = './IC9600/images/'
-    save_path = './ResNet18/test_results/new_IC9600_ResNet18_fourth_layer_normalized.txt'
+    save_path = './Inception-v2/test_results/IC9600_Inception_fourth_layer.txt'
     i=0
     with open (save_path, 'w') as f:
         image_list = os.listdir(read_path)
@@ -34,12 +33,12 @@ def compute_ResNet18_IC9600():
             image = Image.open(read_path + image_name)
             image_name = image_name.replace(' ','_')
             if(image.mode != 'RGB'):
-                image = image.convert('RGB')
+                image = image.convert('RGB')   
             input_tensor = preprocess(image)
             complexity = get_complexity_score(input_tensor)
             f.write(image_name + ' ' + str(complexity) + '\n')
             
-def compute_ResNet18_Savoias():
+def compute_Inception_Savoias():
     main_read_path = './Savoias-Dataset-master/images/'
     write_path = './ResNet18/test_reuslts/Savoias_ResNet18_fourth_layer_normalized.txt'
     categories_list = os.listdir(main_read_path)
@@ -60,9 +59,8 @@ def compute_ResNet18_Savoias():
             
 if __name__ == '__main__':   
     '''IC9600    '''
-    compute_ResNet18_IC9600()
+    compute_Inception_IC9600()
 
   
-    '''Savoias   
-    compute_ResNet18_Savoias()
-'''
+    '''Savoias'''   
+    compute_Inception_Savoias()
