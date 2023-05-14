@@ -3,8 +3,6 @@ import torchvision
 import torch.nn as nn
 import torch.nn.functional as F
 
-
-
 class slam(nn.Module):
     def __init__(self, spatial_dim):        #ritorna uno scalare compreso tra 0 e 1 che indica la complessità
         super(slam,self).__init__()
