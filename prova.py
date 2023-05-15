@@ -1,11 +1,11 @@
 import torch
+import numpy as np
 import torchvision.transforms as T
 import torchvision.transforms.functional as TF
 from PIL import Image
 import os
-import numpy as np
-import cv2
 
+values =[]
 class Transform:
 	def __init__(self, trans_type):
 		self.type = trans_type
@@ -53,20 +53,15 @@ class Transform:
 			im = images
 		return im
 
+if __name__ == '__main__':
+    inference_transform = T.Compose([T.Resize((512,512)),
+                                Transform("brightness"),
+                                T.Lambda(lambda x: torch.stack(x)),
+                                T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+                                ])
 
-image_name = os.listdir('./my_images')[1]
-img = Image.open(f'./my_images/{image_name}')
-inference_transform = T.Compose([T.Resize((512,512)),
-                            Transform('brightness'),
-                            T.Lambda(lambda x: torch.stack(x)),
-                            T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-                            ])
-
-img.show()
-images = inference_transform(img)
-
-for image in images:
-    ycbcr = Image.fromarray((image.permute(1,2,0).numpy() * 255).astype(np.uint8), mode='YCbCr')
-    #extract Y channel
-    y, cb, cr = ycbcr.split()
-    y.show()
+    image_list = os.listdir('./my_images/')
+    image = Image.open('./my_images/'+image_list[0])
+    images = inference_transform(image)
+    for im in images:
+        Image.fromarray((im.permute(1,2,0).numpy()*255).astype(np.uint16)).show()

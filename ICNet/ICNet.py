@@ -2,6 +2,7 @@ import torch
 import torchvision
 import torch.nn as nn
 import torch.nn.functional as F
+from torchvision.models import ResNet18_Weights
 
 class slam(nn.Module):
     def __init__(self, spatial_dim):        #ritorna uno scalare compreso tra 0 e 1 che indica la complessità
@@ -77,8 +78,8 @@ class up_conv_bn_relu(nn.Module):
 class ICNet(nn.Module):    
     def __init__(self, is_pretrain = True, size1 = 512, size2 = 256):       #costruttore
         super(ICNet,self).__init__()
-        resnet18Pretrained1 = torchvision.models.resnet18(pretrained= is_pretrain)  #carico il modello preaddestrato su ImageNet
-        resnet18Pretrained2 = torchvision.models.resnet18(pretrained= is_pretrain)  #pretrain deprecato, ma non so se è un problema
+        resnet18Pretrained1 = torchvision.models.resnet18(weights=ResNet18_Weights.DEFAULT)  #carico il modello preaddestrato su ImageNet
+        resnet18Pretrained2 = torchvision.models.resnet18(weights=ResNet18_Weights.DEFAULT)  #pretrain deprecato, ma non so se è un problema
         
         self.size1 = size1  #dimensione immagine input = 512
         self.size2 = size2  #dimensione immagine input = 256

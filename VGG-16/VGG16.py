@@ -5,7 +5,6 @@ from torchvision import transforms
 from PIL import Image
 import os
 
-
 model = models.vgg16(weights='DEFAULT')
 model = nn.Sequential(*list(model.features.children())[:24]) # quarto blocco e non quarto layer
 model.eval() # Fa in modo che dropout e batchnorm siano deterministici (necessario per inferenza)
@@ -28,11 +27,11 @@ def get_complexity_score(input_tensor):
 
 def compute_VGG16_IC9600():
     read_path = './IC9600/images/'
-    save_path = './VGG-16/test_results/new_IC9600_VGG-16_fourth_layer_normalized.txt'
+    save_path = './VGG-16/test_results/IC9600_VGG-16_fourth_layer_normalized.txt'
     i=1
-    with open (save_path, 'w') as f:
+    with open (save_path, 'a') as f:
         image_list = os.listdir(read_path)
-        for image_name in image_list:
+        for image_name in image_list[1214:]:
             i+=1
             print(f"Processing image {i}/{len(image_list)}...", end="\r")
             image = Image.open(read_path + image_name).convert('RGB')

@@ -105,7 +105,7 @@ if __name__ == '__main__':
 	device = torch.device(0)
 	model.to(device) 
 	operation = args.type
-	with open(f'transformation/{operation}.csv', 'w', newline='') as csvfile:
+	with open(f'transformation/files_csv/{operation}.csv', 'w', newline='') as csvfile:
 		writer = csv.writer(csvfile)
 		image_list = os.listdir(args.path)
 		for image_name in image_list:
@@ -117,6 +117,3 @@ if __name__ == '__main__':
 			writerow = [image_name] + complexities
 			writer.writerow(writerow)
 			complexities = []
-			
-
-			
