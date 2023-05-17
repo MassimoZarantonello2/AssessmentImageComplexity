@@ -8,7 +8,7 @@ import os
 model = models.vgg16(weights='DEFAULT')
 model = nn.Sequential(*list(model.features.children())[:24]) # quarto blocco e non quarto layer
 model.eval() # Fa in modo che dropout e batchnorm siano deterministici (necessario per inferenza)
-model.cuda() # Esegue il modello in GPU, se non disponibile va commentata
+#model.cuda() # Esegue il modello in GPU, se non disponibile va commentata
 
 
 preprocess = transforms.Compose([
@@ -20,7 +20,7 @@ preprocess = transforms.Compose([
 
 @torch.no_grad()
 def get_complexity_score(input_tensor):
-    img_tensor = input_tensor.cuda().unsqueeze(0)
+    img_tensor = input_tensor.unsqueeze(0)
     output = model(img_tensor)
     return output.mean().cpu().numpy()
 
@@ -28,7 +28,7 @@ def get_complexity_score(input_tensor):
 def compute_VGG16_IC9600():
     read_path = './IC9600/images/'
     save_path = './VGG-16/test_results/IC9600_VGG-16_fourth_layer_normalized.txt'
-    i=1
+    i=1215
     with open (save_path, 'a') as f:
         image_list = os.listdir(read_path)
         for image_name in image_list[1214:]:

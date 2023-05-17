@@ -59,6 +59,7 @@ class Transform:
 			for v in values:
 				im.save('tmp.jpg', quality=v.item())
 				images.append(T.ToTensor()(Image.open('tmp.jpg')))
+				im.delete()
 			im = images
 		return im
 
@@ -73,47 +74,53 @@ def blend(ori_img, ic_img, alpha = 0.8, cm = plt.get_cmap("magma")):
         
 def infer_one_image(image):   #mette il modello in modalità di valutazione 
     with torch.no_grad():      #disabilita il calcolo dei gradienti
-        #ori_height = image.height
-        #ori_width = image.width
         img = image.to(device)   
         img = img.unsqueeze(0)    #https://stackoverflow.com/questions/57237352/what-does-unsqueeze-do-in-pytorch
-        ic_score, ic_map = model(img)   #esegue la predizione ritornando lo score della complessità e la mappa
+        ic_score, _ = model(img)   #esegue la predizione ritornando lo score della complessità e la mappa
         ic_score = ic_score.item() 
-        #ic_map = F.interpolate(ic_map, (ori_height, ori_width), mode = 'bilinear')
-        
-        ## gene blend map
-        #ic_map_img = (ic_map * 255).round().squeeze().detach().cpu().numpy().astype('uint8')
-        #blend_img = blend(np.array(image), ic_map_img)
         return ic_score
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='test transformations')
-	parser.add_argument("type", choices=['brightness', 'contrast', 'saturation',
+	parser.add_argument("-typ",dest = 'type', choices=['brightness', 'contrast', 'saturation',
 										'hue', 'noise', 'hflip', 'posterize',
-										'blur', 'jpeg'], default='noise')
+										'blur', 'jpeg'], default='none')
 	parser.add_argument("-iph",dest="path",default='./my_images/')
 	args = parser.parse_args()
- 
-	inference_transform = T.Compose([T.Resize((512,512)),
-								Transform(args.type),
-								T.Lambda(lambda x: torch.stack(x)),
-								T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-								])
 	model = ICNet()
 	model.load_state_dict(torch.load('./checkpoint/ck.pth',map_location=torch.device('cpu')))
 	model.eval()
 	device = torch.device(0)
-	model.to(device) 
-	operation = args.type
-	with open(f'transformation/files_csv/{operation}.csv', 'w', newline='') as csvfile:
-		writer = csv.writer(csvfile)
-		image_list = os.listdir(args.path)
-		for image_name in image_list:
-			complexities = []
-			image = Image.open(args.path + image_name)
-			transformed_images = inference_transform(image)
-			for image in transformed_images:
-				complexities.append(str(infer_one_image(image)))
-			writerow = [image_name] + complexities
-			writer.writerow(writerow)
-			complexities = []
+	model.to(device)
+ 
+	if args.type == 'none':
+		transformations = ['brightness', 'contrast', 'saturation', 'hue', 'noise', 'hflip', 'posterize', 'blur', 'jpeg']
+	else:
+		transformations = [args.type]
+  
+	for t in transformations:
+		print('\n')
+		i = 1
+		inference_transform = T.Compose([T.Resize((512,512)),
+							Transform(t),
+							T.Lambda(lambda x: torch.stack(x)),
+							T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+							])
+		with open(f'transformation/files_csv/{t}.csv', 'w', newline='') as csvfile:
+			writer = csv.writer(csvfile)
+			image_list = os.listdir(args.path)
+			for image_name in image_list:
+				print(f'Applaying {t} transformations on image: {i}/{len(image_list)}', end='\r')
+				complexities = []
+				image = Image.open(args.path + image_name)
+				print(image_name)
+				if(image.mode != 'RGB'):
+					image = image.convert('RGB')
+				transformed_images = inference_transform(image)
+				writerow = values
+				for image in transformed_images:
+					complexities.append(str(infer_one_image(image)))
+				writerow = [image_name] + complexities
+				writer.writerow(writerow)
+				complexities = []
+				i += 1
