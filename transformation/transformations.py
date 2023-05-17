@@ -72,11 +72,11 @@ def blend(ori_img, ic_img, alpha = 0.8, cm = plt.get_cmap("magma")):
     return blend
 
         
-def infer_one_image(image):   #mette il modello in modalità di valutazione 
-    with torch.no_grad():      #disabilita il calcolo dei gradienti
+def infer_one_image(image):
+    with torch.no_grad():
         img = image.to(device)   
-        img = img.unsqueeze(0)    #https://stackoverflow.com/questions/57237352/what-does-unsqueeze-do-in-pytorch
-        ic_score, _ = model(img)   #esegue la predizione ritornando lo score della complessità e la mappa
+        img = img.unsqueeze(0)
+        ic_score, _ = model(img)
         ic_score = ic_score.item() 
         return ic_score
 
@@ -117,7 +117,6 @@ if __name__ == '__main__':
 				if(image.mode != 'RGB'):
 					image = image.convert('RGB')
 				transformed_images = inference_transform(image)
-				writerow = values
 				for image in transformed_images:
 					complexities.append(str(infer_one_image(image)))
 				writerow = [image_name] + complexities
