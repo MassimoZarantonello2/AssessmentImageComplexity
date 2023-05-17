@@ -59,7 +59,6 @@ class Transform:
 			for v in values:
 				im.save('tmp.jpg', quality=v.item())
 				images.append(T.ToTensor()(Image.open('tmp.jpg')))
-				im.delete()
 			im = images
 		return im
 
@@ -110,10 +109,9 @@ if __name__ == '__main__':
 			writer = csv.writer(csvfile)
 			image_list = os.listdir(args.path)
 			for image_name in image_list:
-				print(f'Applaying {t} transformations on image: {i}/{len(image_list)}', end='\r')
+				print(f'Applying {t} transformations on image: {i}/{len(image_list)}', end='\r')
 				complexities = []
 				image = Image.open(args.path + image_name)
-				print(image_name)
 				if(image.mode != 'RGB'):
 					image = image.convert('RGB')
 				transformed_images = inference_transform(image)
