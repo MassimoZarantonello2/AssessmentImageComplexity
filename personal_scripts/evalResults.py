@@ -76,37 +76,19 @@ def get_Savoias_GT_Scores():
         
 
 if __name__ == "__main__":
-    #GT_category_scores = get_category_data("./IC9600/parsed_files/test_and_train_parsed.txt")
-    #ICNet_category_scores = get_category_data("./IC9600/ICNet_results.txt")
 
-    '''IC9600 with VGG16'''
+    '''IC9600 with VGG16
     _,IC9600_GT = get_all_data('./IC9600/parsed_files/test_and_train_parsed.txt')
-    _,ICNet_IC9600_scores = get_all_data('./VGG-16/test_results/VGG_ResNet18_fourth_layer_normalized.txt')
+    _,VGG16_IC9600_scores = get_all_data('./VGG-16/test_results/IC9600_VGG-16_fourth_layer_normalized.txt')
     print('\nIC9600 with VGG16')
-    print(evaInfo(IC9600_GT,ICNet_IC9600_scores))
+    print(evaInfo(IC9600_GT,VGG16_IC9600_scores))
     print('---------------------------------\n')
     time.sleep(1)
-    
-    '''IC9600 with ResNet'''
-    _,IC9600_GT = get_all_data('./IC9600/parsed_files/test_and_train_parsed.txt')
-    _,ICNet_IC9600_scores = get_all_data('./ResNet18/test_results/new_IC9600_ResNet18_fourth_layer_normalized.txt')
-    print('\nIC9600 with VGG16')
-    print(evaInfo(IC9600_GT,ICNet_IC9600_scores))
-    print('---------------------------------\n')
-    time.sleep(1)
-    
-    '''SAVOIAS with ResNet'''
-    _,IC9600_GT = get_all_data('./IC9600/parsed_files/test_and_train_parsed.txt')
-    _,ICNet_IC9600_scores = get_all_data('./ResNet18/test_results/new_IC9600_ResNet18_fourth_layer_normalized.txt')
-    print('\nIC9600 with VGG16')
-    print(evaInfo(IC9600_GT,ICNet_IC9600_scores))
-    print('---------------------------------\n')
-    time.sleep(1)
-    
+    '''
     '''SAVOIAS with VGG16'''
-    _,IC9600_GT = get_all_data('./IC9600/parsed_files/test_and_train_parsed.txt')
-    _,ICNet_IC9600_scores = get_all_data('./ResNet18/test_results/new_IC9600_ResNet18_fourth_layer_normalized.txt')
-    print('\nIC9600 with VGG16')
-    print(evaInfo(IC9600_GT,ICNet_IC9600_scores))
+    SAVOIAS_GT = get_Savoias_GT_Scores()
+    _,VGG16_SAVOIAS_scores = get_all_data('./VGG-16/test_results/new_Savoias_VGG16_fourth_layer_normalized.txt')
+    print('\SAVOIAS with VGG16')
+    print(evaInfo(SAVOIAS_GT,VGG16_SAVOIAS_scores))
     print('---------------------------------\n')
     time.sleep(1)
