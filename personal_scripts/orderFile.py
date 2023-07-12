@@ -1,5 +1,4 @@
 path = './VGG-16/test_results/IC9600_VGG-16_fourth_layer_normalized.txt'
-test_path = './IC9600/parsed_files/test_parsed.txt'
 
 def create_dict(path):
     d = {}
@@ -7,7 +6,8 @@ def create_dict(path):
         lines = f.readlines()
         for line in lines:
             name,score = line.split(' ')
-            d[name] = float(score)
+            name = name.split('_')[1]
+            d[name] = line
         
     return d
 
@@ -26,7 +26,7 @@ def write__dict(path, d):
         for key in d:
             f.write(key[0] + ' ' + str(key[1]) + '\n')
 
-a = create_dict('./VGG-16/test_results/Savoias_VGG16_fourth_layer.txt')
+a = create_dict('./my_ICNet_SAVOIAS_results.txt')
 
 a = sorted(a.items(), key=lambda x: x[0])
-write__dict('./VGG-16/test_results/new_Savoias_VGG16_fourth_layer.txt', a)
+write__dict('./new_my_ICNet_SAVOIAS_results.txt', a)

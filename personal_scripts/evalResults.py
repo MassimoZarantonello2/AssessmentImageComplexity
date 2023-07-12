@@ -30,6 +30,17 @@ def get_all_data(path):         #funzione che ritorna una lista di label e una l
             scores.append(cpl_score[:len(cpl_score)-1])
     return labels,scores
 
+def get_all_data2(path):        #funzione che ritorna una lista di label e una lista di score se sono nel formato "label_score" !!separati da un underscore
+    labels = []
+    scores = []
+    with open(path, 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            name,cpl_score = line.split(" ", 1)
+            labels.append(name)
+            scores.append(float(cpl_score[:len(cpl_score)-1]))
+    return labels,scores    
+
 def get_partial_data(path,GT_labels):            #funzione che ritorna una lista di 
     ICNet_test_results = []
     with open(path, 'r') as f:
@@ -81,29 +92,6 @@ def csv_output(info,info2):
             writer.writerow([metrics[i],info[i]])
 
 if __name__ == "__main__":
-    '''ResNet-18 with IC9600'''
-    resnet_res = './ResNet18/test_results/new_IC9600_ResNet18_fourth_layer.txt'
-    IC_GT = './IC9600/parsed_files/test_and_train_parsed.txt'
-    _,resnet_scores = get_all_data(resnet_res)
-    _,IC_GT_labels = get_all_data(IC_GT)
-    csv_output(evaInfo(resnet_scores,IC_GT_labels),'ResNet-18 with IC9600')
-    
-    '''ResNet-18 with Savoias'''
-    resnet_res = './ResNet18/test_results/Savoias_ResNet18_fourth_layer.txt'
-    Savoias_GT = './Savoias-Dataset-master/GroundTruth/xlsx/'
-    _,resnet_scores = get_all_data(resnet_res)
-    Savoias_GT_scores = get_Savoias_GT_Scores()
-    csv_output(evaInfo(resnet_scores,Savoias_GT_scores),'ResNet-18 with Savoias')
-    
-    '''VGG-16 with IC9600'''
-    vgg_res = './VGG-16/test_results/IC9600_VGG-16_fourth_layer.txt'
-    IC_GT = './IC9600/parsed_files/test_parsed.txt'
-    label,vgg_scores = get_all_data(vgg_res)
-    _,IC_GT_labels = get_all_data(IC_GT)
-    csv_output(evaInfo(vgg_scores,IC_GT_labels),'VGG-16 with IC9600')
-    
-    '''VGG-16 with Savoias'''
-    vgg_res = './VGG-16/test_results/Savoias_VGG16_fourth_layer_sorted.txt'
-    _,vgg_scores = get_all_data(vgg_res)
-    csv_output(evaInfo(vgg_scores,Savoias_GT_scores),'VGG-16 with Savoias')
-    
+    _,ICNet_savoias = get_all_data2("./new_my_ICNet_SAVOIAS_results.txt")
+    scores = get_Savoias_GT_Scores()
+    print(evaInfo(ICNet_savoias,scores))

@@ -11,7 +11,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": []
+            "args": ["-i ./IC9600/parsed_files/test_parsed.txt,./IC9600/images"]
         }
     ]
 }

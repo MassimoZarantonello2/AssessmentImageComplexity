@@ -54,7 +54,7 @@ def infer_one_image(img_path):
 
     
     
-def infer_directory(img_dir):
+def  infer_directory(img_dir):
     imgs = os.listdir(img_dir)
     for img in tqdm(imgs):      #esegue infer_one_image su tutte le immagini della cartella
         img_path = os.path.join(img_dir, img)
@@ -74,7 +74,7 @@ if __name__ == "__main__":
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
-    with open('./my_ICNet_results.txt','a') as f:
+    with open('./my_ICNet_SAVOIAS_results.txt','a') as f:
         if os.path.isfile(args.input):      #se l'input è un file
             infer_one_image(args.input)
         else:                               #se l'input è una directory
